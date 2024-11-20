@@ -1,0 +1,8 @@
+# Asegura que los archivos de texto usen LF como estándar en el repositorio
+*.xml text eol=lf
+*.csv text eol=lf
+
+# Para otros archivos de texto comunes
+*.txt text eol=lf
+*.md text eol=lf
+*.java text eol=lf
