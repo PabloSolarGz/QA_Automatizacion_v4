@@ -18,22 +18,21 @@ public class LoginSteps {
 
     @Given("Ingreso Sagcom2 con los siguientes datos del archivo csv")
     public void abrirNavegadorDesdeCSV() {
-        data = LoginDao.cargarDatosSesion();
+        String perfil = "Ejecutivo AFP";
+        String comision = "Sin Comisión";
+        data = LoginDao.cargarDatosSesion(perfil, comision);
 
         if (data == null || data.isEmpty()) {
-            System.err.println("No se encontraron datos disponibles en el archivo CSV para realizar la prueba.");
-            throw new RuntimeException("Ejecución detenida: No hay datos disponibles en el CSV.");
+            throw new RuntimeException("No se encontraron datos disponibles en el archivo CSV.");
         }
 
         String navegador = data.get("csvBrowser");
         String ambiente = data.get("csvAmbiente");
 
         if (navegador == null || ambiente == null) {
-            System.err.println("Datos de navegador o ambiente no encontrados en el CSV.");
             throw new IllegalArgumentException("Datos de navegador o ambiente faltantes.");
         }
 
-        // Iniciar el navegador
         driver = Browsers.getDriver(navegador);
         String url = Ambientes.seleccionarUrl(ambiente);
         driver.get(url);
@@ -42,29 +41,18 @@ public class LoginSteps {
         System.out.println("Página de login cargada exitosamente.");
     }
 
-
     @When("Ingreso usuario y contraseña validos")
     public void ingresarCredenciales() {
-        try {
-            Thread.sleep(1000);
+        String usuario = data.get("csvUsuario");
+        String password = data.get("csvPass");
 
-            // Utilizar las claves correctas desde el CSV
-            String usuario = data.get("csvUsuario");
-            String password = data.get("csvPass");
-
-            System.out.println("Usuario: " + usuario + ", Contraseña: " + password);
-
-            if (usuario == null || password == null) {
-                throw new IllegalArgumentException("Los datos de usuario o contraseña no están presentes.");
-            }
-
-            loginPage.ingresarCredenciales(usuario, password);
-            loginPage.clickIniciarSesion();
-        } catch (Exception e) {
-            System.err.println("Error al ingresar credenciales: " + e.getMessage());
+        if (usuario == null || password == null) {
+            throw new IllegalArgumentException("Los datos de usuario o contraseña no están presentes.");
         }
-    }
 
+        loginPage.ingresarCredenciales(usuario, password);
+        loginPage.clickIniciarSesion();
+    }
 
     @Then("Cierro el navegador")
     public void cerrarNavegador() {
