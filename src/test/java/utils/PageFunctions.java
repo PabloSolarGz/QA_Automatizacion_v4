@@ -31,7 +31,7 @@ public class PageFunctions {
     }
 
     public static void pausaParaPruebas() throws InterruptedException {
-        System.out.println("************************************************************************************");
+        System.out.println("*****************************************************************************");
         System.out.println("Se inicia una pausa para probar de 5 segundos");
         Thread.sleep(1000);
         System.out.println("Quedan 4 segundos");
@@ -43,7 +43,7 @@ public class PageFunctions {
         System.out.println("Quedan 1 segundos");
         Thread.sleep(1000);
         System.out.println("a terminado la pausa");
-        System.out.println("************************************************************************************");
+        System.out.println("*****************************************************************************");
     }
 
     public static WebDriverWait getWait(WebDriver driver, int seconds) {

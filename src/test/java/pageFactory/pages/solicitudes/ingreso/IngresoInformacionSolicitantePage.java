@@ -638,7 +638,8 @@ public class IngresoInformacionSolicitantePage extends PageFunctions {
             pausaParaPruebas();
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
-    }}
+        }
+    }
 
 
     public void ingresandoDatos() throws InterruptedException {

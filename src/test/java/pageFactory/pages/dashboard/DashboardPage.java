@@ -8,16 +8,19 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
+import utils.Browsers;
 import utils.Data;
+import utils.PageFunctions;
 
-public class DashboardPage {
+public class DashboardPage extends PageFunctions {
     private WebDriver driver;
     private WebDriverWait wait;
+    PageFunctions pageFunctions;
 
     @FindBy(xpath = "//*[@id=\"root\"]/div/section/header/div[1]/div/div[1]/h3")
     WebElement labelSAGCOM;
 
-    @FindBy(xpath = "//*[@id=\"root\"]/div/section/header/div[1]/div/div[2]/ul/li[1]/span")
+    @FindBy(xpath = "//li[contains(@class, 'ant-menu-overflow-item ant-menu-item ant-menu-item-selected ant-menu-item-only-child')]")
     WebElement itemInicio;
 
     @FindBy(xpath = "")
@@ -56,13 +59,13 @@ public class DashboardPage {
     @FindBy(xpath = "")
     WebElement itemNominasCorreo;
 
-    @FindBy(xpath = "//div[contains(@class, 'ant-col mobile-column ant-col-xs-2 ant-col-md-3 ant-col-lg-5')]")
+    @FindBy(xpath = "")
     WebElement itemMenu;
 
-    @FindBy(xpath = "//li[contains(@class, 'ant-dropdown-menu-item ant-dropdown-menu-item-only-child')]")
+    @FindBy(xpath = "//div[contains(@class, 'ant-col mobile-column ant-col-xs-2 ant-col-md-3 ant-col-lg-5')]")
     WebElement btnMiPerfil;
 
-    @FindBy(xpath = "//a[contains(text(),'Cerrar sesión')]")
+    @FindBy(xpath = "//a[text()='Cerrar sesión']")
     WebElement btnCerrarSesion;
 
     @FindBy(id = "rut")
@@ -72,6 +75,7 @@ public class DashboardPage {
     WebElement btnComenzar;
 
     public DashboardPage(WebDriver driver) {
+        super(driver);
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         PageFactory.initElements(driver, this);
@@ -86,7 +90,6 @@ public class DashboardPage {
         } catch (Exception e) {
             System.err.println("Error al cerrar la sesión: " + e.getMessage());
         }
-
     }
 
     public void ingresarRutSolicitud() {
@@ -115,15 +118,14 @@ public class DashboardPage {
 
     public void cerrarSesion() {
         try {
-            itemInicio.click();
-            Thread.sleep(1000);
-            itemMenu.click();
-            Thread.sleep(1000);
-            btnCerrarSesion.click();
-            Thread.sleep(1000);
+            wait.until(ExpectedConditions.elementToBeClickable(btnMiPerfil)).click();
+            wait.until(ExpectedConditions.visibilityOf(btnCerrarSesion));
+            wait.until(ExpectedConditions.elementToBeClickable(btnCerrarSesion)).click();
             System.out.println("Sesión cerrada exitosamente.");
         } catch (Exception e) {
             System.err.println("Error al cerrar la sesión: " + e.getMessage());
+        } finally {
+            Browsers.cerrarNavegador();
         }
     }
 }

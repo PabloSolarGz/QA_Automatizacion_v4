@@ -111,13 +111,6 @@ public class IngresoAntecedentesLaboralesPage extends PageFunctions {
         return ingresoAntecedentesLaboralesPrevisionalesDao;
     }
 
-    public IngresoInformacionSolicitanteDao getIngresoInformacionSolicitanteDao() {
-        if (ingresoInformacionSolicitanteDao == null) {
-            ingresoInformacionSolicitanteDao = new IngresoInformacionSolicitanteDao();
-        }
-        return ingresoInformacionSolicitanteDao;
-    }
-
     private int indiceActual = 0;
 
     public void validarDatosCsv() {
@@ -134,12 +127,14 @@ public class IngresoAntecedentesLaboralesPage extends PageFunctions {
             String cambioAfp = dao.getDato("csvCambioAfp", indiceActual);
             String pensionado16744 = dao.getDato("csvPensionado16744", indiceActual);
             String licenciaMedica = dao.getDato("csvLicenciaMedica", indiceActual);
+            System.out.println("*****************************************************************************");
             System.out.println("Datos del caso actual (fila " + (indiceActual + 1) + "):");
             System.out.println("  Situación Laboral: " + situacionLaboral);
             System.out.println("  Fecha Afiliación AFP: " + fechaAfiliacion);
             System.out.println("  Cambio AFP: " + cambioAfp);
             System.out.println("  Pensionado Ley 16744: " + pensionado16744);
             System.out.println("  Licencia Médica: " + licenciaMedica);
+            System.out.println("*****************************************************************************");
         } catch (Exception e) {
             System.err.println("Error al leer el dato del caso actual: " + e.getMessage());
         }
@@ -365,59 +360,6 @@ public class IngresoAntecedentesLaboralesPage extends PageFunctions {
         }
     }
 
-    public void seleccionarCompaniaAseguradora() {
-        try {
-            String[] opcionCompaniaAseguradoraAleatorio = {
-                    "Otros (especificar)",
-                    "Compañías de seguros del contrato N° 11"
-            };
-            int indiceCompaniaAseguradoraAleatorio = random.nextInt(opcionCompaniaAseguradoraAleatorio.length);
-            String valorSeleccionCompaniaSeguro = opcionCompaniaAseguradoraAleatorio[indiceCompaniaAseguradoraAleatorio];
-            System.out.println("La opción seleccionada es: " + valorSeleccionCompaniaSeguro);
-            selCompaniaAseguradora.click();
-            WebElement valorCompaniaSeguro = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(".//div[contains(@title, \"" + valorSeleccionCompaniaSeguro + "\")]")));
-            valorCompaniaSeguro.click();
-            System.out.println("Se ha seleccionado la opción: " + valorSeleccionCompaniaSeguro);
-            switch (valorSeleccionCompaniaSeguro) {
-                case "Otros (especificar)":
-                    seleccionarOtrosCompaniaAseguradora();
-                    break;
-                case "Compañías de seguros del contrato N° 11":
-                    System.out.println("Opción seleccionada: Compañías de seguros del contrato N° 11.");
-                    break;
-                default:
-                    System.err.println("Opción desconocida seleccionada: " + valorSeleccionCompaniaSeguro);
-                    break;
-            }
-        } catch (Exception e) {
-            System.err.println("Error al seleccionar la Compañia Aseguradora: " + e.getMessage());
-        }
-    }
-
-    public void seleccionarOtrosCompaniaAseguradora() {
-        try {
-            String[] opcionOtrasCpmaniasAleatorio = {
-                    "Compañías de seguros de contrato N°1",
-                    "Compañías de seguros de contrato N°2",
-                    "Compañías de seguros de contrato N°3",
-                    "Compañías de seguros de contrato N°4",
-                    "Compañías de seguros de contrato N°5",
-                    "Compañías de seguros de contrato N°6",
-                    "Compañías de seguros de contrato N°7",
-                    "Compañías de seguros de contrato N°8"
-            };
-            int indiceOtrosCompaniasAleatorio = random.nextInt(opcionOtrasCpmaniasAleatorio.length);
-            String valorSeleccionOtrosCompaniaSeguro = opcionOtrasCpmaniasAleatorio[indiceOtrosCompaniasAleatorio];
-            System.out.println("La opción seleccionada es: " + valorSeleccionOtrosCompaniaSeguro);
-            selOtrosCompaniaAseguradora.click();
-            WebElement valorOtrosCompaniaSeguro = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(".//div[contains(@title, \"" + valorSeleccionOtrosCompaniaSeguro + "\")]")));
-            valorOtrosCompaniaSeguro.click();
-            System.out.println("Se ha seleccionado la opción: " + valorSeleccionOtrosCompaniaSeguro);
-        } catch (Exception e) {
-            System.err.println("Error al seleccionar Otros Compañias Aseguradora: " + e.getMessage());
-        }
-    }
-
     public void seleccionarAcogidoLicenciaMedicaPorCsv() {
         try {
             String valorAcogidoLicenciaMedica = ingresoAntecedentesLaboralesPrevisionalesDao.getDato("csvLicenciaMedica", indiceActual).toLowerCase().trim();
@@ -461,8 +403,6 @@ public class IngresoAntecedentesLaboralesPage extends PageFunctions {
         }
     }
 
-
-
     public void ingresandoAntecedentes() throws InterruptedException {
         validarDatosCsv();
         seleccionarSituacionLaboralPorCsv();
@@ -475,7 +415,6 @@ public class IngresoAntecedentesLaboralesPage extends PageFunctions {
         seleccionarCambioAfpAfiliadoPorCsv();
         seleccionarPensioandoLey16744PorCsv();
         adjuntarDocumentoCobertura();
-        seleccionarCompaniaAseguradora();
         seleccionarAcogidoLicenciaMedicaPorCsv();
         clickBtnContinuar();
     }
